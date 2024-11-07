@@ -55,17 +55,13 @@ This project consists of the following core classes:
 ### Running the Program
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/EnigmaMachineSimulator.git
-   cd EnigmaMachineSimulator
+   git clone https://github.com/turjoy18/Enigma-Machine.git
+   cd Enigma Machine
    ```
 
-2. Compile the Java files:
+2. Compile and Run the Program:
    ```bash
-   javac Main.java EnigmaMachine.java Rotor.java Reflector.java Plugboard.java
-   ```
-
-3. Run the program:
-   ```bash
+   javac *.java
    java Main
    ```
 
