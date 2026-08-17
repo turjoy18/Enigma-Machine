@@ -16,6 +16,7 @@ describe("useEnigmaStore", () => {
       lastLamp: null,
       lastTrace: null,
       animating: false,
+      mode: "operate",
     });
   });
 
@@ -38,5 +39,16 @@ describe("useEnigmaStore", () => {
     expect(state.plaintext).toBe("");
     expect(state.ciphertext).toBe("");
     expect(state.rotors[2].position).toBe(3);
+  });
+
+  it("locks into operate after boot and returns to story on stand up", () => {
+    const store = useEnigmaStore.getState();
+    store.sitDown();
+    expect(useEnigmaStore.getState().mode).toBe("boot");
+    expect(useEnigmaStore.getState().animating).toBe(true);
+    useEnigmaStore.getState().finishBoot();
+    expect(useEnigmaStore.getState().mode).toBe("operate");
+    useEnigmaStore.getState().standUp();
+    expect(useEnigmaStore.getState().mode).toBe("story");
   });
 });
