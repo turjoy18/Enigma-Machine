@@ -21,11 +21,15 @@ export type EnigmaStore = {
   lastLamp: string | null;
   lastTrace: Trace | null;
   animating: boolean;
+  mode: "story" | "boot" | "operate";
   setRotor: (slot: 0 | 1 | 2, name: RotorName) => void;
   setRing: (slot: 0 | 1 | 2, ring: number) => void;
   setPosition: (slot: 0 | 1 | 2, position: number) => void;
   setReflector: (name: ReflectorName) => void;
   setAnimating: (animating: boolean) => void;
+  sitDown: () => void;
+  finishBoot: () => void;
+  standUp: () => void;
   pressKey: (letter: string) => Trace | null;
   reset: () => void;
 };
@@ -59,6 +63,7 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
   lastLamp: null,
   lastTrace: null,
   animating: false,
+  mode: "story",
 
   setRotor: (slot, name) =>
     set((state) => {
@@ -97,6 +102,17 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
     }),
 
   setAnimating: (animating) => set({ animating }),
+
+  sitDown: () => set({ mode: "boot", animating: true, lastLamp: null }),
+
+  finishBoot: () => set({ mode: "operate", animating: false, lastLamp: null }),
+
+  standUp: () =>
+    set({
+      mode: "story",
+      animating: false,
+      lastLamp: null,
+    }),
 
   pressKey: (raw) => {
     const letter = raw.toUpperCase();
