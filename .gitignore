@@ -27,3 +27,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Next.js web app ###
+web/node_modules/
+web/.next/
+web/out/
+web/*.tsbuildinfo

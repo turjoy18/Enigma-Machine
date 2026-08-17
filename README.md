@@ -50,6 +50,7 @@ This project consists of the following core classes:
 ## Getting Started
 ### Prerequisites
 - Java JDK 8 or higher installed on your system.
+- Node.js 20 or higher for the web instrument in `web/`.
 - A basic understanding of the Enigma machine's operation will help in understanding the code and how to configure it.
 
 ### Running the Program
@@ -79,6 +80,17 @@ This project consists of the following core classes:
 - **Historical Accuracy**: This simulation models the essential mechanics of the Enigma machine but omits certain mechanical nuances. 
 - **Character Range**: Currently supports only uppercase English letters (A-Z), excluding spaces and punctuation.
   
+## Web instrument
+
+The browser UI lives in [`web/`](web/). It is a Next.js app (TypeScript, Tailwind) that will visualize rotors, lamps, and the story of a keypress. The Java CLI remains the reference implementation.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
 ## Future Enhancements
 - **Extended Character Set**: Support for punctuation and other symbols.
-- **Graphical Interface**: Potentially integrate with a GUI (e.g., in JavaFX or with a web-based front end using Node.js and React.js) to visualize rotor movements and wiring paths.
