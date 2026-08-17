@@ -3,6 +3,7 @@
 import { OperateView } from "@/components/hud/OperateView";
 import { BootSequence } from "@/components/story/BootSequence";
 import { StoryShell } from "@/components/story/StoryShell";
+import { resumeAudio, startHum, stopHum } from "@/lib/audio";
 import { useEnigmaStore } from "@/store/useEnigmaStore";
 import { useEffect } from "react";
 
@@ -14,9 +15,16 @@ export default function Home() {
     const locked = mode !== "story";
     document.documentElement.style.overflow = locked ? "hidden" : "";
     document.body.style.overflow = locked ? "hidden" : "";
+    if (locked) {
+      void resumeAudio();
+      startHum();
+    } else {
+      stopHum();
+    }
     return () => {
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      stopHum();
     };
   }, [mode]);
 

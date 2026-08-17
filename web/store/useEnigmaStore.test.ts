@@ -15,7 +15,10 @@ describe("useEnigmaStore", () => {
       ciphertext: "",
       lastLamp: null,
       lastTrace: null,
+      pathIndex: -1,
       animating: false,
+      slowMo: false,
+      muted: true,
       mode: "operate",
     });
   });
@@ -50,5 +53,24 @@ describe("useEnigmaStore", () => {
     expect(useEnigmaStore.getState().mode).toBe("operate");
     useEnigmaStore.getState().standUp();
     expect(useEnigmaStore.getState().mode).toBe("story");
+  });
+
+  it("rejects an invalid plug and accepts a valid pair", () => {
+    expect(useEnigmaStore.getState().addPlug("A", "A")).toBe(false);
+    expect(useEnigmaStore.getState().addPlug("A", "B")).toBe(true);
+    expect(useEnigmaStore.getState().plugs).toEqual([["A", "B"]]);
+    expect(useEnigmaStore.getState().addPlug("A", "C")).toBe(false);
+  });
+
+  it("holds the lamp until commitLamp in slow-mo", () => {
+    useEnigmaStore.setState({ slowMo: true });
+    useEnigmaStore.getState().pressKey("H");
+    expect(useEnigmaStore.getState().lastLamp).toBeNull();
+    expect(useEnigmaStore.getState().ciphertext).toBe("");
+    expect(useEnigmaStore.getState().animating).toBe(true);
+    useEnigmaStore.getState().commitLamp();
+    expect(useEnigmaStore.getState().lastLamp).toBe("I");
+    expect(useEnigmaStore.getState().ciphertext).toBe("I");
+    expect(useEnigmaStore.getState().animating).toBe(false);
   });
 });
