@@ -28,6 +28,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+### Java ###
+src/*.class
+
 ### Next.js web app ###
 web/node_modules/
 web/.next/
