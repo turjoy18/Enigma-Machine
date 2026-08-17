@@ -16,6 +16,11 @@ export function Settings() {
   const setPosition = useEnigmaStore((s) => s.setPosition);
   const setReflector = useEnigmaStore((s) => s.setReflector);
   const reset = useEnigmaStore((s) => s.reset);
+  const slowMo = useEnigmaStore((s) => s.slowMo);
+  const muted = useEnigmaStore((s) => s.muted);
+  const setSlowMo = useEnigmaStore((s) => s.setSlowMo);
+  const setMuted = useEnigmaStore((s) => s.setMuted);
+  const applyDailyKey = useEnigmaStore((s) => s.applyDailyKey);
 
   return (
     <aside className="flex w-full max-w-xs flex-col gap-5 border border-brass/25 bg-metal/40 p-4">
@@ -84,6 +89,31 @@ export function Settings() {
           ))}
         </select>
       </label>
+      <label className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted">
+        Slow-mo current
+        <input
+          type="checkbox"
+          className="accent-lamp"
+          checked={slowMo}
+          onChange={(e) => setSlowMo(e.target.checked)}
+        />
+      </label>
+      <label className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted">
+        Mute
+        <input
+          type="checkbox"
+          className="accent-lamp"
+          checked={muted}
+          onChange={(e) => setMuted(e.target.checked)}
+        />
+      </label>
+      <button
+        type="button"
+        onClick={applyDailyKey}
+        className="border border-brass/70 px-3 py-2 text-[11px] uppercase tracking-[0.3em] text-brass hover:border-lamp hover:text-lamp"
+      >
+        Today&apos;s key
+      </button>
       <button
         type="button"
         onClick={reset}

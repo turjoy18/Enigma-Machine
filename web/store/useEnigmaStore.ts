@@ -1,8 +1,10 @@
 "use client";
 
-import { EnigmaMachine } from "@/lib/enigma";
+import { dailyConfig } from "@/lib/dailyKey";
+import { EnigmaMachine, Plugboard } from "@/lib/enigma";
 import type { ReflectorName, RotorName, Trace } from "@/lib/enigma";
 import { isLetter } from "@/lib/layout";
+import { play, setMuted as setAudioMuted } from "@/lib/audio";
 import { create } from "zustand";
 
 export type RotorSlot = {
@@ -20,17 +22,27 @@ export type EnigmaStore = {
   ciphertext: string;
   lastLamp: string | null;
   lastTrace: Trace | null;
+  pathIndex: number;
   animating: boolean;
+  slowMo: boolean;
+  muted: boolean;
   mode: "story" | "boot" | "operate";
   setRotor: (slot: 0 | 1 | 2, name: RotorName) => void;
   setRing: (slot: 0 | 1 | 2, ring: number) => void;
   setPosition: (slot: 0 | 1 | 2, position: number) => void;
   setReflector: (name: ReflectorName) => void;
   setAnimating: (animating: boolean) => void;
+  setSlowMo: (slowMo: boolean) => void;
+  setMuted: (muted: boolean) => void;
+  addPlug: (a: string, b: string) => boolean;
+  removePlug: (letter: string) => void;
+  applyDailyKey: () => void;
   sitDown: () => void;
   finishBoot: () => void;
   standUp: () => void;
   pressKey: (letter: string) => Trace | null;
+  commitLamp: () => void;
+  setPathIndex: (pathIndex: number) => void;
   reset: () => void;
 };
 
@@ -39,6 +51,14 @@ const DEFAULT_ROTORS: [RotorSlot, RotorSlot, RotorSlot] = [
   { name: "II", ring: 0, position: 0, startPosition: 0 },
   { name: "III", ring: 0, position: 0, startPosition: 0 },
 ];
+
+const cleared = {
+  plaintext: "",
+  ciphertext: "",
+  lastLamp: null,
+  lastTrace: null,
+  pathIndex: -1,
+};
 
 function buildMachine(state: Pick<EnigmaStore, "rotors" | "reflector" | "plugs">) {
   return EnigmaMachine.fromConfig({
@@ -62,7 +82,10 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
   ciphertext: "",
   lastLamp: null,
   lastTrace: null,
+  pathIndex: -1,
   animating: false,
+  slowMo: false,
+  muted: false,
   mode: "story",
 
   setRotor: (slot, name) =>
@@ -89,19 +112,50 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
       const next = ((position % 26) + 26) % 26;
       rotors[slot].position = next;
       rotors[slot].startPosition = next;
-      return { rotors, plaintext: "", ciphertext: "", lastLamp: null, lastTrace: null };
+      return { rotors, ...cleared };
     }),
 
-  setReflector: (name) =>
-    set({
-      reflector: name,
-      plaintext: "",
-      ciphertext: "",
-      lastLamp: null,
-      lastTrace: null,
-    }),
+  setReflector: (name) => set({ reflector: name, ...cleared }),
 
   setAnimating: (animating) => set({ animating }),
+  setSlowMo: (slowMo) => set({ slowMo }),
+  setMuted: (value) => {
+    setAudioMuted(value);
+    set({ muted: value });
+  },
+
+  addPlug: (a, b) => {
+    const board = new Plugboard();
+    try {
+      for (const [x, y] of get().plugs) board.addPlug(x, y);
+      board.addPlug(a, b);
+    } catch {
+      return false;
+    }
+    set({ plugs: board.pairs(), ...cleared });
+    return true;
+  },
+
+  removePlug: (letter) =>
+    set((state) => ({
+      plugs: state.plugs.filter(([x, y]) => x !== letter && y !== letter),
+      ...cleared,
+    })),
+
+  applyDailyKey: () => {
+    const config = dailyConfig();
+    set({
+      rotors: config.rotors.map((name, i) => ({
+        name,
+        ring: config.rings[i],
+        position: config.positions[i],
+        startPosition: config.positions[i],
+      })) as EnigmaStore["rotors"],
+      reflector: config.reflector,
+      plugs: config.plugs ?? [],
+      ...cleared,
+    });
+  },
 
   sitDown: () => set({ mode: "boot", animating: true, lastLamp: null }),
 
@@ -112,6 +166,7 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
       mode: "story",
       animating: false,
       lastLamp: null,
+      pathIndex: -1,
     }),
 
   pressKey: (raw) => {
@@ -119,6 +174,10 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
     if (!isLetter(letter) || get().animating) return null;
     const machine = buildMachine(get());
     const trace = machine.encryptChar(letter);
+    const slow = get().slowMo;
+    play("click");
+    play("ratchet");
+    if (trace.stepped.middle || trace.stepped.left) play("ratchet");
     set((state) => {
       const rotors = state.rotors.map((rotor, i) => ({
         ...rotor,
@@ -127,13 +186,32 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
       return {
         rotors,
         plaintext: state.plaintext + letter,
-        ciphertext: state.ciphertext + trace.output,
-        lastLamp: trace.output,
+        ciphertext: slow ? state.ciphertext : state.ciphertext + trace.output,
+        lastLamp: slow ? null : trace.output,
         lastTrace: trace,
+        pathIndex: slow ? 0 : trace.path.length - 1,
+        animating: slow,
       };
     });
+    if (!slow) play("lamp");
     return trace;
   },
+
+  commitLamp: () => {
+    const trace = get().lastTrace;
+    if (!trace) return;
+    play("lamp");
+    set((state) => ({
+      ciphertext: state.ciphertext.endsWith(trace.output)
+        ? state.ciphertext
+        : state.ciphertext + trace.output,
+      lastLamp: trace.output,
+      animating: false,
+      pathIndex: trace.path.length - 1,
+    }));
+  },
+
+  setPathIndex: (pathIndex) => set({ pathIndex }),
 
   reset: () =>
     set((state) => ({
@@ -141,9 +219,6 @@ export const useEnigmaStore = create<EnigmaStore>((set, get) => ({
         ...rotor,
         position: rotor.startPosition,
       })) as EnigmaStore["rotors"],
-      plaintext: "",
-      ciphertext: "",
-      lastLamp: null,
-      lastTrace: null,
+      ...cleared,
     })),
 }));

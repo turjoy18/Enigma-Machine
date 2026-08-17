@@ -82,7 +82,7 @@ This project consists of the following core classes:
   
 ## Web instrument
 
-The browser UI lives in [`web/`](web/). It is a Next.js app (TypeScript, Tailwind) that will visualize rotors, lamps, and the story of a keypress. The Java CLI remains the reference implementation.
+The browser UI lives in [`web/`](web/). Scroll the story of a keypress, then **sit down** to operate the machine. The Java CLI in `src/` remains the reference implementation and the source of the TypeScript cipher tests.
 
 ```bash
 cd web
@@ -91,6 +91,15 @@ npm run dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
+
+- **Story:** scroll chapters (letter in → cables → wheels → reflector → lamp).
+- **Operate:** QWERTZ keyboard and lampboard, 3D rotors, plugboard cables, optional slow-mo current, mute, and **Today's key**.
+- Type A–Z only. Stand up to return to the story.
+
+```bash
+cd web
+npm test
+```
 
 ## Future Enhancements
 - **Extended Character Set**: Support for punctuation and other symbols.
