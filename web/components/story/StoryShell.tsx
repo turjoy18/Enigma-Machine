@@ -1,5 +1,7 @@
 "use client";
 
+import { ChapterSection } from "@/components/story/ChapterSection";
+import { ClassifiedReveal } from "@/components/story/ClassifiedReveal";
 import { HistoryRail } from "@/components/story/HistoryRail";
 import { Typewriter } from "@/components/story/Typewriter";
 import { CHAPTERS } from "@/lib/story/chapters";
@@ -43,10 +45,14 @@ export function StoryShell() {
     return () => ctx.revert();
   }, []);
 
+  const early = CHAPTERS.slice(0, 2);
+  const late = CHAPTERS.slice(2);
+
   return (
     <div ref={root} className="flex flex-col">
-      <section className="flex min-h-screen flex-col justify-between px-8 py-10 sm:px-16 sm:py-14">
-        <header className="flex items-baseline justify-between text-[11px] uppercase tracking-[0.28em] text-brass">
+      <section className="relative flex min-h-screen flex-col justify-between px-8 py-10 sm:px-16 sm:py-14">
+        <div className="story-grain pointer-events-none absolute inset-0 opacity-35" />
+        <header className="relative z-10 flex items-baseline justify-between text-[11px] uppercase tracking-[0.28em] text-brass">
           <span>Wehrmacht I</span>
           <button
             type="button"
@@ -56,7 +62,7 @@ export function StoryShell() {
             Sit down
           </button>
         </header>
-        <main>
+        <main className="relative z-10">
           <Typewriter
             text="Made for keys, lamps, and everything between."
             className="mb-8 text-[11px] uppercase tracking-[0.35em] text-muted"
@@ -72,7 +78,7 @@ export function StoryShell() {
             Scroll the path of a single letter. Then sit down and type.
           </p>
         </main>
-        <footer className="flex items-baseline justify-between text-[11px] uppercase tracking-[0.28em] text-brass">
+        <footer className="relative z-10 flex items-baseline justify-between text-[11px] uppercase tracking-[0.28em] text-brass">
           <span>&amp; make cipher</span>
           <span>A–Z only</span>
         </footer>
@@ -80,27 +86,14 @@ export function StoryShell() {
 
       <HistoryRail />
 
-      {CHAPTERS.map((chapter) => (
-        <section
-          key={chapter.kicker}
-          data-chapter
-          className="flex min-h-screen flex-col justify-center px-8 py-24 sm:px-16"
-        >
-          <Typewriter
-            text={chapter.kicker}
-            className="text-[10px] uppercase tracking-[0.35em] text-brass"
-            stagger={0.035}
-          />
-          <h2
-            data-fade
-            className="mt-6 max-w-3xl font-sans text-5xl leading-[0.95] tracking-tight sm:text-7xl"
-          >
-            {chapter.title}
-          </h2>
-          <p data-fade className="mt-8 max-w-lg text-base leading-8 text-muted">
-            {chapter.body}
-          </p>
-        </section>
+      {early.map((chapter) => (
+        <ChapterSection key={chapter.kicker} chapter={chapter} />
+      ))}
+
+      <ClassifiedReveal />
+
+      {late.map((chapter) => (
+        <ChapterSection key={chapter.kicker} chapter={chapter} />
       ))}
 
       <section className="flex min-h-[70vh] flex-col items-start justify-center gap-8 px-8 py-24 sm:px-16">

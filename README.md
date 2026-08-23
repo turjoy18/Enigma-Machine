@@ -92,9 +92,10 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-- **Story:** scroll chapters (letter in → cables → wheels → reflector → lamp).
+- **Story:** typewriter kickers, horizontal 1918–1945 history rail, parallax schematics, and a classified hover-reveal between chapters. Scroll the path of a keypress (letter in → cables → wheels → reflector → lamp), then sit down.
 - **Operate:** QWERTZ keyboard and lampboard, 3D rotors, plugboard cables, optional slow-mo current, mute, and **Today's key**.
 - Type A–Z only. Stand up to return to the story.
+- **Accessibility:** `prefers-reduced-motion` disables typewriter stagger, horizontal scrub, parallax, and the hover mask (static layout instead).
 
 ```bash
 cd web

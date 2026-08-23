@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" fill="none">
+  <rect width="400" height="260" fill="#1a1510"/>
+  <rect x="24" y="24" width="352" height="212" stroke="#c4a574" stroke-width="1" opacity="0.4"/>
+  <text x="40" y="56" fill="#c4a574" font-family="monospace" font-size="11" letter-spacing="3">INTERCEPT · 1940</text>
+  <text x="40" y="92" fill="#8a8174" font-family="monospace" font-size="13">FROM: HUT 6</text>
+  <text x="40" y="118" fill="#8a8174" font-family="monospace" font-size="13">TO: DIRECTOR</text>
+  <text x="40" y="156" fill="#f4ead8" font-family="monospace" font-size="14" letter-spacing="4">ILBDA ZEILS XRETL</text>
+  <rect x="40" y="178" width="180" height="18" fill="#12100e"/>
+  <rect x="40" y="204" width="240" height="18" fill="#12100e"/>
+  <text x="40" y="236" fill="#e8a54b" font-family="monospace" font-size="10" letter-spacing="2">MOVE CURSOR TO DECLASSIFY</text>
+</svg>
