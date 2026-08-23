@@ -14,6 +14,17 @@ import { useRef, useState } from "react";
 const CARD_WIDTH = 320;
 const GAP = 28;
 
+function CardMedia({ src }: { src: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt=""
+      className="h-36 w-full object-cover opacity-85"
+    />
+  );
+}
+
 export function HistoryRail() {
   const reduced = usePrefersReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,8 +52,10 @@ export function HistoryRail() {
           {HISTORY.map((entry) => (
             <li
               key={entry.year}
-              className="border border-brass/30 bg-metal/40 p-5"
+              className="overflow-hidden border border-brass/30 bg-metal/40"
             >
+              <CardMedia src={entry.image} />
+              <div className="p-5">
               <p className="font-mono text-lamp">{entry.year}</p>
               <h3 className="mt-3 font-sans text-2xl tracking-tight">
                 {entry.title}
@@ -53,6 +66,7 @@ export function HistoryRail() {
                   {entry.cipher}
                 </p>
               ) : null}
+              </div>
             </li>
           ))}
         </ol>
@@ -83,28 +97,31 @@ export function HistoryRail() {
             return (
               <article
                 key={entry.year}
-                className={`w-[320px] shrink-0 border bg-metal/50 p-6 transition-[border-color,transform,box-shadow] duration-300 ${
+                className={`w-[320px] shrink-0 overflow-hidden border bg-metal/50 transition-[border-color,transform,box-shadow] duration-300 ${
                   isActive
                     ? "scale-[1.03] border-lamp shadow-[0_0_28px_rgba(232,165,75,0.18)]"
                     : "scale-100 border-brass/30"
                 }`}
               >
-                <p
-                  className={`font-mono text-sm tracking-[0.2em] ${
-                    isActive ? "text-lamp" : "text-brass"
-                  }`}
-                >
-                  {entry.year}
-                </p>
-                <h3 className="mt-4 font-sans text-2xl leading-tight tracking-tight">
-                  {entry.title}
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-muted">{entry.body}</p>
-                {entry.cipher ? (
-                  <p className="mt-5 font-mono text-xs tracking-[0.35em] text-lamp">
-                    {entry.cipher}
+                <CardMedia src={entry.image} />
+                <div className="p-6">
+                  <p
+                    className={`font-mono text-sm tracking-[0.2em] ${
+                      isActive ? "text-lamp" : "text-brass"
+                    }`}
+                  >
+                    {entry.year}
                   </p>
-                ) : null}
+                  <h3 className="mt-4 font-sans text-2xl leading-tight tracking-tight">
+                    {entry.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-muted">{entry.body}</p>
+                  {entry.cipher ? (
+                    <p className="mt-5 font-mono text-xs tracking-[0.35em] text-lamp">
+                      {entry.cipher}
+                    </p>
+                  ) : null}
+                </div>
               </article>
             );
           })}

@@ -8,6 +8,12 @@ describe("story chapters", () => {
     expect(CHAPTERS[0].kicker).toMatch(/Tastatur/);
     expect(CHAPTERS.every((c) => c.title && c.body)).toBe(true);
   });
+
+  it("points each chapter at a photo under /story/", () => {
+    expect(CHAPTERS.every((c) => c.art?.startsWith("/story/") && /\.(jpg|png)$/.test(c.art))).toBe(
+      true,
+    );
+  });
 });
 
 describe("typewriter", () => {

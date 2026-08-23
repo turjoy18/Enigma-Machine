@@ -12,4 +12,8 @@ describe("history", () => {
     const war = HISTORY.find((e) => e.year === "1939");
     expect(war?.cipher).toBe("ILBDA");
   });
+
+  it("attaches a photo path for every timeline beat", () => {
+    expect(HISTORY.every((e) => e.image.startsWith("/story/"))).toBe(true);
+  });
 });

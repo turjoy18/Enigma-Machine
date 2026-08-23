@@ -25,7 +25,7 @@ export function ParallaxLayer({
   });
   const y = useTransform(scrollYProgress, [0, 1], [28, -28]);
   const rotate = useTransform(scrollYProgress, [0, 1], [-1.5, 1.5]);
-  const opacity = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.15, 0.28, 0.28, 0.12]);
+  const opacity = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.12, 0.32, 0.32, 0.14]);
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
@@ -34,16 +34,17 @@ export function ParallaxLayer({
         <img
           src={src}
           alt={alt}
-          className="pointer-events-none absolute inset-0 m-auto h-[70%] w-auto max-w-[90%] object-contain opacity-20"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-25"
         />
       ) : (
         <motion.img
           src={src}
           alt={alt}
-          className="pointer-events-none absolute inset-0 m-auto h-[70%] w-auto max-w-[90%] object-contain"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
           style={{ y, rotate, opacity }}
         />
       )}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/40" />
       <div className="story-grain pointer-events-none absolute inset-0 opacity-40" />
       <div className="relative z-10">{children}</div>
     </div>

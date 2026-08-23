@@ -23,9 +23,9 @@ export function ClassifiedReveal() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/story/classified.svg"
-          alt="Declassified intercept document"
-          className="mt-8 max-h-[420px] w-full max-w-xl border border-brass/30 object-contain"
+          src="/story/classified.jpg"
+          alt="Declassified intercept archive"
+          className="mt-8 max-h-[420px] w-full max-w-xl border border-brass/30 object-cover"
         />
         <p className="mt-6 max-w-md text-sm leading-7 text-muted">
           A letter never encrypts to itself. That property leaked the machine.
@@ -64,9 +64,9 @@ export function ClassifiedReveal() {
       <div className="relative z-10 mt-10 max-w-xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/story/classified.svg"
+          src="/story/classified.jpg"
           alt=""
-          className="w-full border border-brass/25 object-contain"
+          className="aspect-[4/3] w-full border border-brass/25 object-cover"
         />
         {!open ? (
           <motion.div

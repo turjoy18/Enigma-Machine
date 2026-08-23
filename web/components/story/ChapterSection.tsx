@@ -12,7 +12,7 @@ export function ChapterSection({ chapter }: ChapterSectionProps) {
   return (
     <section data-chapter className="relative min-h-screen">
       <ParallaxLayer
-        src={chapter.art ?? "/story/rotors.svg"}
+        src={chapter.art ?? "/story/rotors.jpg"}
         className="flex min-h-screen flex-col justify-center px-8 py-24 sm:px-16"
       >
         <Typewriter
