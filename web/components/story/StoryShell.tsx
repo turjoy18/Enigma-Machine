@@ -1,5 +1,7 @@
 "use client";
 
+import { Typewriter } from "@/components/story/Typewriter";
+import { CHAPTERS } from "@/lib/story/chapters";
 import { useEnigmaStore } from "@/store/useEnigmaStore";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,34 +10,6 @@ import { useEffect, useRef } from "react";
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
-
-const CHAPTERS = [
-  {
-    kicker: "01  Tastatur",
-    title: "A letter goes in.",
-    body: "You press a key. Before the current even moves, the right rotor steps one notch — every time.",
-  },
-  {
-    kicker: "02  Steckerbrett",
-    title: "Cables swap it.",
-    body: "Pairs of letters trade places on the plugboard. A patch cord is a secret you can hold.",
-  },
-  {
-    kicker: "03  Walzen",
-    title: "Wheels scramble it.",
-    body: "Three rotors, chosen from five. Wiring, ring, and window. When a notch hits, the next wheel ticks. Sometimes two at once.",
-  },
-  {
-    kicker: "04  Umkehrwalze",
-    title: "It turns around.",
-    body: "The reflector sends the signal back through different contacts. A letter never encrypts to itself. That is not a bug. That is the machine.",
-  },
-  {
-    kicker: "05  Lampenfeld",
-    title: "A lamp lights.",
-    body: "The current comes home as a glow. Write it down. The next key is already a different cipher.",
-  },
-];
 
 export function StoryShell() {
   const sitDown = useEnigmaStore((s) => s.sitDown);
@@ -82,9 +56,11 @@ export function StoryShell() {
           </button>
         </header>
         <main>
-          <p data-fade className="mb-8 text-[11px] uppercase tracking-[0.35em] text-muted">
-            Made for keys, lamps, and everything between.
-          </p>
+          <Typewriter
+            text="Made for keys, lamps, and everything between."
+            className="mb-8 text-[11px] uppercase tracking-[0.35em] text-muted"
+            stagger={0.022}
+          />
           <h1 className="font-sans text-[18vw] leading-[0.8] tracking-tight sm:text-[8rem]">
             ENIGMA
           </h1>
@@ -107,12 +83,11 @@ export function StoryShell() {
           data-chapter
           className="flex min-h-screen flex-col justify-center px-8 py-24 sm:px-16"
         >
-          <p
-            data-fade
+          <Typewriter
+            text={chapter.kicker}
             className="text-[10px] uppercase tracking-[0.35em] text-brass"
-          >
-            {chapter.kicker}
-          </p>
+            stagger={0.035}
+          />
           <h2
             data-fade
             className="mt-6 max-w-3xl font-sans text-5xl leading-[0.95] tracking-tight sm:text-7xl"
