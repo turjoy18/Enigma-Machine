@@ -1,5 +1,6 @@
 "use client";
 
+import { HistoryRail } from "@/components/story/HistoryRail";
 import { Typewriter } from "@/components/story/Typewriter";
 import { CHAPTERS } from "@/lib/story/chapters";
 import { useEnigmaStore } from "@/store/useEnigmaStore";
@@ -76,6 +77,8 @@ export function StoryShell() {
           <span>A–Z only</span>
         </footer>
       </section>
+
+      <HistoryRail />
 
       {CHAPTERS.map((chapter) => (
         <section
