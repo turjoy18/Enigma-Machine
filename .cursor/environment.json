@@ -1,0 +1,17 @@
+{
+  "name": "Enigma Machine",
+  "install": "cd web && npm ci && cd ../src && javac *.java",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "cd web && npm run dev",
+      "description": "Next.js dev server for the Enigma web instrument on http://localhost:3000"
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 3000
+    }
+  ]
+}
